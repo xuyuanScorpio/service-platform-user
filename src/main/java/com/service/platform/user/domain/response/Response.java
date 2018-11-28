@@ -94,12 +94,5 @@ public class Response<T> implements Serializable{
         this.code = code;
     }
 
-    @Override
-    public String toString() {
-        return "Response{" +
-                "data=" + data +
-                ", msg='" + msg + '\'' +
-                ", code=" + code +
-                '}';
-    }
+
 }

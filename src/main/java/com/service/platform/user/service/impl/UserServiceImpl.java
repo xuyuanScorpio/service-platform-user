@@ -1,5 +1,7 @@
 package com.service.platform.user.service.impl;
 
+import com.service.platform.user.common.domain.BaseRequest;
+import com.service.platform.user.common.validate.sms.SmsCodeProcessor;
 import com.service.platform.user.constants.Constant;
 import com.service.platform.user.domain.RequestType;
 import com.service.platform.user.domain.model.EntityUser;
@@ -14,9 +16,12 @@ import com.service.platform.user.utils.GsonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TException;
 import org.apache.thrift.transport.TTransportException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -159,6 +164,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String sendSms(String phone) {
+
+        BaseRequest request = new BaseRequest("sms", phone);
+
+        try {
+            smsCodeProcessor.create(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
+
+
+    }
+
+    @Override
     public String modifiyUserInfo(ModifiyUserInfoRequest modifiyUserInfoRequest) {
 
         Response response;
@@ -233,6 +254,9 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+
+
 //
 //
 //    @Override
@@ -283,14 +307,22 @@ public class UserServiceImpl implements UserService {
 //
 
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public static final String CACHE_VALUE = "UserService-";
+
+
+    @Autowired
+    private SmsCodeProcessor smsCodeProcessor;
 
     @Autowired
     private UserServiceSupport userServiceSupport;
 
     @Autowired
     private EntityUserMapper entityUserMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Autowired
     private ThriftClient thriftClient;

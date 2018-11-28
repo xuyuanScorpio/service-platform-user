@@ -42,3 +42,7 @@ produce:
   expiretime: 3
   timeout: 10000000
 
+#验证码应用级别的配置
+security:
+  length: 6
+  expireSecond: 60

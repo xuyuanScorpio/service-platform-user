@@ -23,4 +23,6 @@ public interface UserService {
 
     public String modifiyMobile(ModifiyMobileRequest modifiyMobileRequest);
 
+    public String sendSms(String phone);
+
 }

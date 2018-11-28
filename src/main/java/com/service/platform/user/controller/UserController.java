@@ -6,6 +6,9 @@ import com.service.platform.user.domain.response.Response;
 import com.service.platform.user.service.UserService;
 import com.service.platform.user.thriftClient.domain.ThriftClient;
 import com.service.platform.user.utils.GsonUtil;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.thrift.TException;
 import org.apache.thrift.transport.TTransportException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +68,7 @@ public class UserController {
     }
 
     @GetMapping("checkMobile/{mobile}")
+
     public String checkMobile(@PathVariable String mobile){
 
         return userService.checkMobileIsRegist(mobile);
@@ -77,6 +81,7 @@ public class UserController {
     }
 
     @PutMapping("resetPassword")
+    @ApiOperation(value="重置用户密码", notes="根据用户手机号重置用户登录密码")
     public String resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest){
 
         return userService.resetPassword(resetPasswordRequest);
@@ -106,8 +111,18 @@ public class UserController {
         return userService.logout(id);
     }
 
+
+    @GetMapping("sendSms/{phone}")
+    public String sendSms(@PathVariable String phone){
+
+        return userService.sendSms(phone);
+
+    }
+
     @Autowired
     private UserService userService;
+
+
 
     @Autowired
     private ThriftClient thriftClient;
